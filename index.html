@@ -1,0 +1,151 @@
+<div class="container">
+    <h1>Sudoku Solver</h1>
+    <p>Enter your Puzzle ID below to see the solution.</p>
+    
+    <div class="input-group">
+        <input type="text" id="puzzleId" placeholder="e.g., JS-B1V1E0001">
+        <button onclick="findSolution()">Solve</button>
+    </div>
+
+    <div id="errorMessage" class="error-message"></div>
+    <div id="sudokuGrid" class="grid"></div>
+</div>
+
+<style>
+    body {
+        font-family: '-apple-system', BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        background: linear-gradient(135deg, #f5f7fa 0%, #e4ecf7 100%);
+        color: #5a6578;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        min-height: 100vh;
+        margin: 0;
+        padding: 20px;
+    }
+
+    .container {
+        background-color: rgba(255, 255, 255, 0.95);
+        backdrop-filter: blur(10px);
+        padding: 35px 25px;
+        border-radius: 28px;
+        box-shadow: 0 15px 35px rgba(165, 180, 200, 0.2);
+        width: 100%;
+        max-width: 360px;
+        text-align: center;
+    }
+
+    h1 {
+        font-size: 1.7rem;
+        font-weight: 700;
+        color: #6c7d93; 
+        margin: 0 0 8px 0;
+    }
+
+    p {
+        font-size: 0.9rem;
+        color: #a3b1c6;
+        margin: 0 0 30px 0;
+    }
+
+    .input-group {
+        display: flex;
+        gap: 12px;
+        margin-bottom: 20px;
+    }
+
+    input {
+        flex: 1;
+        padding: 16px;
+        border: 2px solid #eef2f7;
+        border-radius: 16px;
+        font-size: 1rem;
+        outline: none;
+        background-color: #f8fafc;
+    }
+
+    input:focus {
+        border-color: #cbdcf7;
+        background-color: #ffffff;
+    }
+
+    button {
+        background-color: #e2eafc;
+        color: #526b9e;
+        border: none;
+        padding: 16px 26px;
+        border-radius: 16px;
+        font-weight: 600;
+        cursor: pointer;
+    }
+
+    .grid {
+        display: grid;
+        grid-template-columns: repeat(9, 1fr);
+        gap: 1px;
+        background-color: #d1dbe5;
+        padding: 3px;
+        border-radius: 14px;
+        margin-top: 25px;
+    }
+
+    .cell {
+        background-color: #ffffff;
+        aspect-ratio: 1;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 600;
+        font-size: 1.2rem;
+        color: #4a5568;
+    }
+
+    .cell:nth-child(3n) { border-right: 2px solid #b4c4d4; }
+    .cell:nth-child(9n) { border-right: none; }
+    .grid div:nth-child(n+19):nth-child(-n+27),
+    .grid div:nth-child(n+46):nth-child(-n+54) {
+        border-bottom: 2px solid #b4c4d4;
+    }
+
+    .error-message {
+        color: #e56a6a;
+        font-size: 0.9rem;
+        margin-top: 15px;
+    }
+</style>
+
+<script>
+    // Database updated with your specific custom formatting schema
+    const puzzleDatabase = {
+        'JS-B1V1E0001': '534678912672195348198342567859761423426853791713924856961537284287419635345286179',
+        'JS-B1V1M0002': '123456789456789123789123456234567891567891234891234567345678912678912345912345678',
+        'JS-B1V1H99':   '987654321234567891111111111222222222333333333444444444555555555666666666777777777'
+    };
+
+    function findSolution() {
+        // Keeps user input case-insensitive so 'js-b1v1e0001' works perfectly too
+        const idInput = document.getElementById('puzzleId').value.trim().toUpperCase();
+        const gridContainer = document.getElementById('sudokuGrid');
+        const errorContainer = document.getElementById('errorMessage');
+        
+        gridContainer.innerHTML = '';
+        gridContainer.style.display = 'none';
+        errorContainer.style.display = 'none';
+
+        if (puzzleDatabase[idInput]) {
+            const solutionString = puzzleDatabase[idInput];
+            
+            for (let i = 0; i < 81; i++) {
+                const cell = document.createElement('div');
+                cell.className = 'cell';
+                cell.innerText = solutionString[i];
+                gridContainer.appendChild(cell);
+            }
+            
+            gridContainer.style.display = 'grid';
+        } else {
+            errorContainer.innerText = "We couldn't find that Puzzle ID. Double-check your book!";
+            errorContainer.style.display = 'block';
+        }
+    }
+</script>
